@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <cstdlib>
 #include <ctime>
+#include <limits>
 
 // character struct
 struct Character {
@@ -52,6 +53,70 @@ void printCharacter(const Character& character) {
     std::cout << "Charisma: " << character.charisma << "\n";
 }
 
+// list of character classes and ask the user to pick one
+std::string askCharacterClass() {
+    const std::vector<std::string> classes = {
+        "Artificer", "Barbarian", "Bard", "Cleric", "Druid", "Fighter",
+        "Monk", "Paladin", "Ranger", "Rogue", "Sorcerer", "Warlock", "Wizard"
+    };
+
+    std::cout << "Pick a character class from the list below:\n";
+    for (size_t i = 0; i < classes.size(); ++i) {
+        std::cout << i + 1 << ". " << classes[i] << std::endl;
+    }
+
+    int choice = 0;
+    while (choice < 1 || choice > static_cast<int>(classes.size())) {
+        std::cout << "Enter the number corresponding to your chosen class: ";
+        std::cin >> choice;
+
+        if (std::cin.fail() || choice < 1 || choice > static_cast<int>(classes.size())) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Invalid input. Please try again.\n";
+        }
+    }
+    // clear the input buffer after reading the integer
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+    // return the class
+    return classes[choice - 1];
+}
+
+// list of races and ask the user to pick one
+std::string askRace() {
+    const std::vector<std::string> races = {
+        "Human", "Elf", "Dwarf", "Halfling", "Gnome", "Half-Elf", "Half-Orc",
+        "Tiefling", "Dragonborn", "Aarakocra", "Aasimar", "Bugbear", "Centaur",
+        "Changeling", "Firbolg", "Genasi (Air)", "Genasi (Earth)", "Genasi (Fire)",
+        "Genasi (Water)", "Githyanki", "Githzerai", "Goblin", "Goliath", "Harengon",
+        "Hobgoblin", "Kenku", "Kobold", "Lizardfolk", "Minotaur", "Orc", "Satyr",
+        "Shifter", "Tabaxi", "Tortle", "Triton", "Yuan-Ti Pureblood"
+    };
+
+    std::cout << "Pick a race from the list below:\n";
+    for (size_t i = 0; i < races.size(); ++i) {
+        std::cout << i + 1 << ". " << races[i] << std::endl;
+    }
+
+    int choice = 0;
+    while (choice < 1 || choice > static_cast<int>(races.size())) {
+        std::cout << "Enter the number corresponding to your chosen race: ";
+        std::cin >> choice;
+
+        if (std::cin.fail() || choice < 1 || choice > static_cast<int>(races.size())) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Invalid input. Please try again.\n";
+        }
+    }
+    // clear the input buffer after reading the integer
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+    // return the chosen race
+    return races[choice - 1];
+}
+
 int main() {
     // seed the random number generator using the current time (we did this in the numberguesser)
     srand(static_cast<unsigned int>(time(0)));
@@ -66,11 +131,10 @@ int main() {
     std::cout << "Enter your character's name: ";
     std::getline(std::cin, character.name);
 
-    std::cout << "Enter your character's race: ";
-    std::getline(std::cin, character.race);
+    character.race = askRace();
 
-    std::cout << "Enter your character's class: ";
-    std::getline(std::cin, character.characterClass);
+    // Ask the user to pick a character class
+    character.characterClass = askCharacterClass();
 
     std::cout << "Enter your character's background or history: ";
     std::getline(std::cin, character.background);
