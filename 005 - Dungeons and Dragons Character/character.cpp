@@ -53,37 +53,41 @@ void printCharacter(const Character& character) {
     std::cout << "Charisma: " << character.charisma << "\n";
 }
 
-// list of character classes and ask the user to pick one
-std::string askCharacterClass() {
-    const std::vector<std::string> classes = {
-        "Artificer", "Barbarian", "Bard", "Cleric", "Druid", "Fighter",
-        "Monk", "Paladin", "Ranger", "Rogue", "Sorcerer", "Warlock", "Wizard"
-    };
-
-    std::cout << "Pick a character class from the list below:\n";
-    for (size_t i = 0; i < classes.size(); ++i) {
-        std::cout << i + 1 << ". " << classes[i] << std::endl;
+// takes a vector and asks the user to pick an option from it
+std::string askOption(const std::vector<std::string>& options, const std::string& prompt) {
+    std::cout << prompt << "\n";
+    for (size_t i = 0; i < options.size(); ++i) {
+        std::cout << (i + 1) << ". " << options[i] << std::endl;
     }
 
     int choice = 0;
-    while (choice < 1 || choice > static_cast<int>(classes.size())) {
-        std::cout << "Enter the number corresponding to your chosen class: ";
+    while (choice < 1 || choice > static_cast<int>(options.size())) {
+        std::cout << "Enter the number corresponding to your choice: ";
         std::cin >> choice;
 
-        if (std::cin.fail() || choice < 1 || choice > static_cast<int>(classes.size())) {
+        if (std::cin.fail() || choice < 1 || choice > static_cast<int>(options.size())) {
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             std::cout << "Invalid input. Please try again.\n";
         }
     }
+
     // clear the input buffer after reading the integer
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-    // return the class
-    return classes[choice - 1];
+    return options[choice - 1];
 }
 
-// list of races and ask the user to pick one
+// ask for character class
+std::string askCharacterClass() {
+    const std::vector<std::string> classes = {
+        "Artificer", "Barbarian", "Bard", "Cleric", "Druid", "Fighter",
+        "Monk", "Paladin", "Ranger", "Rogue", "Sorcerer", "Warlock", "Wizard"
+    };
+    return askOption(classes, "Pick a character class from the list below:");
+}
+
+// ask for race
 std::string askRace() {
     const std::vector<std::string> races = {
         "Human", "Elf", "Dwarf", "Halfling", "Gnome", "Half-Elf", "Half-Orc",
@@ -93,28 +97,7 @@ std::string askRace() {
         "Hobgoblin", "Kenku", "Kobold", "Lizardfolk", "Minotaur", "Orc", "Satyr",
         "Shifter", "Tabaxi", "Tortle", "Triton", "Yuan-Ti Pureblood"
     };
-
-    std::cout << "Pick a race from the list below:\n";
-    for (size_t i = 0; i < races.size(); ++i) {
-        std::cout << i + 1 << ". " << races[i] << std::endl;
-    }
-
-    int choice = 0;
-    while (choice < 1 || choice > static_cast<int>(races.size())) {
-        std::cout << "Enter the number corresponding to your chosen race: ";
-        std::cin >> choice;
-
-        if (std::cin.fail() || choice < 1 || choice > static_cast<int>(races.size())) {
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Invalid input. Please try again.\n";
-        }
-    }
-    // clear the input buffer after reading the integer
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-    // return the chosen race
-    return races[choice - 1];
+    return askOption(races, "Pick a race from the list below:");
 }
 
 int main() {
